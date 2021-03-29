@@ -18,12 +18,20 @@ tree<-read.tree("SpeciesTree_rooted.txt")
 
 #
 #we need to transpose our table
-tTable <-t(table)
+mat <-t(table)
+
+
+# we need to verify thath the tip names in the tree are the same as the rownames
+#this function will print any tip/rows differents between the two vectors
+# if you have the output "character(0)" it's Ok you can go on the plote
+setdiff(tree$tip.label,colnames(mat))
+
 
 #columns names of Ttable should be exaclty the same as the names of the branches in the tree
 # creat an image file 
-tiff("heatmap.tiff", width = 2000, height = 768, units = "px", res=100)
+tiff("heatmap.tiff", width = 3000, height = 2048, units = "px", res=200)
 
 # plot the tree with a heatmap of orthogroups
-
+phylo.heatmap(tree, mat, labels=F, col = c("white","MediumSpringGreen"))
+dev.off()
 
