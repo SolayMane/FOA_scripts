@@ -31,7 +31,7 @@ done
 
 
 # now, we will run a python script that retriece all the single copy busco sahred genes and perform signle genes alignement, trimming concatenation and phylogenetic treee inference
-
+````
 
 <a href="https://github.com/jamiemcg/BUSCO_phylogenomics/blob/master/BUSCO_phylogenomics.py"> BUSCO_phylogenomics.py </a> 
 
