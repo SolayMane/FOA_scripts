@@ -29,7 +29,7 @@ do
         cp -r $path inputD/run_${new_name}
 done
 
-[busco_phylogenomics.sh](https://www.python.org/)
+* [busco_phylogenomics.py](https://www.python.org/)
 
 
 
