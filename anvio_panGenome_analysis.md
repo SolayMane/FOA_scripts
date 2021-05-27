@@ -60,3 +60,36 @@ TAB-delimited functions ......................: anvioFiles/GCA_000260075-externa
 .
 .
 .
+````
+
+### To continue in preparing the dataset for PanGenome analysis, we should create a new anvi'o contig database givig for each genome its gene model
+
+````bash
+mkdir anvioDB
+
+for file in anvioFiles/*contigs.fa
+
+do 
+  projectName=$(basename ${file%%-*})
+
+  anvi-gen-contigs-database -f $file -n $projectName -T 36 -o anvioDB/${projectName}.db --external-gene-calls anvioFiles/${projectName}-external-gene-calls.txt --ignore-internal-stop-codons --skip-predict-frame
+  
+done
+
+
+
+
+### Create a new anvi'o anvi-gen-genomes-storage 
+````bash
+echo -e 'name\tbin_id\tcollection_id\tprofile_db_path\tcontigs_db_path' > external_genomes.txt
+bin=0
+ls anvioFiles/*contigs.fa | while read file
+  do
+    name=$(basename ${file%%-*})
+    bin=`expr $bin + 1`
+    
+    
+    echo -e "$name\tBin_id_$bin\tCollection_A\t/disk1/FOA/anvio/$file" >> external_genomes.txt
+ done
+
+
