@@ -1,4 +1,39 @@
 ## Workflow used to perform PanGenome analysis using anvio pipeline
+
+### parse gbk files using this pythoin code 
+````python
+#!/usr/bin/env python
+
+import sys, argparse
+import pandas as pd
+from Bio import SeqIO
+tabout = open("tabbedout", 'w')
+tabout.write("GeneID\tType\tScaffold\tStart\tEnd\tStrand\tProduct\taa_sequence\n")
+
+gb_file = "FOA_foa44.gbk"
+for record in SeqIO.parse(open(gb_file,"r"), "genbank") :
+    for f in record.features:
+        if f.type == 'CDS':
+                                                                chr = record.id
+                                                                ID = f.qualifiers['locus_tag'][0]
+                                                                try:
+                                                                        product = f.qualifiers['product'][0]
+                                                                except KeyError:
+                                                                        product = "hypothetical protein"
+                                                                start = f.location.nofuzzy_start + 1
+                                                                end = f.location.nofuzzy_end
+                                                                strand = f.location.strand
+                                                                if strand == 1:
+                                                                        strand = '+'
+                                                                elif strand == -1:
+                                                                        strand = '-'
+                                                                aa_seq = f.qualifiers ['translation'][0]
+                                                                tabout.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (ID, 'CDS', chr, str(start), str(end), strand, product, aa_seq))
+````
+
+                                                                
+                                                                
+
 ### From gbk folder, run anvi-script-process-genbank to generate files for anvi-gen-genome-storage
 ```` bash
 mkdir anvioFiles
