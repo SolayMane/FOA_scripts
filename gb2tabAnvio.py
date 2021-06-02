@@ -22,12 +22,17 @@ tabout = open(args.out, 'w')
 tabout.write("gene_callers_id\tcontig\tstart\tstop\tdirection\tpartial\tcall_type\tsource\tversion\taa_sequence\n")
 
 gb_file = args.input
+
+contig = 0 # we create the first gene id thal will correspond to the ordrg of the genes
 for record in SeqIO.parse(open(gb_file,"r"), "genbank") : ###parsing gbk file by reading it
     for f in record.features: # we are ietrating thorugh the  features in the recordes
         if f.type == 'CDS': # when the recorde features type if CDS we will retrieve qualifiers
             chr = record.id
             ID = f.qualifiers['locus_tag'][0]
-            contig = ID.split("_")[1]
+            if ID != "":
+                contig += 1 # increment the number of the genes to be assigned as gene id
+            elif ID == "":
+                contig = 1
 
             try:
                 product = f.qualifiers['product'][0]
