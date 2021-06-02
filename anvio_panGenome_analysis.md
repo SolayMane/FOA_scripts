@@ -11,15 +11,14 @@ class MyFormatter(argparse.ArgumentDefaultsHelpFormatter):
     def __init__(self,prog):
         super(MyFormatter,self).__init__(prog,max_help_position=48)
 
-parser=argparse.ArgumentParser(prog='gb2tab.py', usage="%(prog)s [options] -i genbank -o tsv_gene_output",
-    description='''Genbank to tab file for gene models to feed anvio pipeline''',
+parser=argparse.ArgumentParser(prog='gb2tabAnvio.py', usage="%(prog)s [options] -i genbank -o tab_gene_output",
+    description='''Genbank to tab file for gene caller to feed anvio pipeline''',
     epilog="""Written by Slimane Khayi (2021) slimane.khayi@inra.ma""",
     formatter_class = MyFormatter)
 
 parser.add_argument('-i','--input', required=True, help='GenBank genome file')
 parser.add_argument('-o','--out', required=True, help='Name of output basename file')
 args=parser.parse_args()
-
 
 tabout = open(args.out, 'w')
 
