@@ -5,31 +5,47 @@
 #!/usr/bin/env python
 
 import sys, argparse
-import pandas as pd
 from Bio import SeqIO
-tabout = open("tabbedout", 'w')
-tabout.write("GeneID\tType\tScaffold\tStart\tEnd\tStrand\tProduct\taa_sequence\n")
 
-gb_file = "FOA_foa44.gbk"
+class MyFormatter(argparse.ArgumentDefaultsHelpFormatter):
+    def __init__(self,prog):
+        super(MyFormatter,self).__init__(prog,max_help_position=48)
+
+parser=argparse.ArgumentParser(prog='gb2tab.py', usage="%(prog)s [options] -i genbank -o tsv_gene_output",
+    description='''Genbank to tab file for gene models to feed anvio pipeline''',
+    epilog="""Written by Slimane Khayi (2021) slimane.khayi@inra.ma""",
+    formatter_class = MyFormatter)
+
+parser.add_argument('-i','--input', required=True, help='GenBank genome file')
+parser.add_argument('-o','--out', required=True, help='Name of output basename file')
+args=parser.parse_args()
+
+
+tabout = open(args.out, 'w')
+
+#gene_callers_id        contig  start   stop    direction       partial call_type       source  version Translation
+tabout.write("gene_callers_id\tcontig\tstart\tstop\tdirection\tpartial\tcall_type\tsource\tversion\taa_sequence\n")
+
+gb_file = args.input
 for record in SeqIO.parse(open(gb_file,"r"), "genbank") :
     for f in record.features:
         if f.type == 'CDS':
-                                                                chr = record.id
-                                                                ID = f.qualifiers['locus_tag'][0]
-                                                                try:
-                                                                        product = f.qualifiers['product'][0]
-                                                                except KeyError:
-                                                                        product = "hypothetical protein"
-                                                                start = f.location.nofuzzy_start + 1
-                                                                end = f.location.nofuzzy_end
-                                                                strand = f.location.strand
-                                                                if strand == 1:
-                                                                        strand = '+'
-                                                                elif strand == -1:
-                                                                        strand = '-'
-                                                                aa_seq = f.qualifiers ['translation'][0]
-                                                                tabout.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (ID, 'CDS', chr, str(start), str(end), strand, product, aa_seq))
-````
+            chr = record.id
+            ID = f.qualifiers['locus_tag'][0]
+            try:
+                product = f.qualifiers['product'][0]
+            except KeyError:
+                product = "hypothetical protein"
+            start = f.location.nofuzzy_start + 1
+            end = f.location.nofuzzy_end
+            strand = f.location.strand
+            if strand == 1:
+                strand = '+'
+            elif strand == -1:
+                strand = '-'
+            aa_seq = f.qualifiers ['translation'][0]
+            tabout.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (ID, 'CDS', chr, str(start), str(end), strand, product, aa_seq))
+
 
                                                                 
                                                                 
