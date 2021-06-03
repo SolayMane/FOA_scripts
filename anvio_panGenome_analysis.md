@@ -63,24 +63,28 @@ do
   
 done
 ````
-###
+#### Generating an anvi’o genomes storage
+
+anvi-gen-genomes-storage -e external_genomes.txt \
+                         -o FOGENOMES.db
 
 
 
 ### Create a new anvi'o anvi-gen-genomes-storage 
 #### --external-genomes FILE_PATH preparation 
 ````bash
-echo -e 'name\tbin_id\tcollection_id\tprofile_db_path\tcontigs_db_path' > external_genomes.txt
-bin=0
-ls anvioFiles/*contigs.fa | while read file
+echo -e 'name\tcontigs_db_path' > external_genomes.txt
+
+ls anvioDB/| while read file
   do
-    name=$(basename ${file%%-*})
-    bin=`expr $bin + 1`
+    name=$(basename ${file%%.*})
     
-    
-    echo -e "$name\tBin_id_$bin\tCollection_A\t/disk1/FOA/anvio/$file" >> external_genomes.txt
+    echo -e "$name\t$(pwd)/anvioDB/$file" >> external_genomes.txt
  done
 ````
+
+
+### 
 #### --internal-genomes FILE_PATH preparation
 ````bash
 cp external_genomes.txt internal_genomes.txt
@@ -112,4 +116,4 @@ sed -i 's/anvioFiles/anvioDB/g' internal_genomes.txt # to modify the file path b
 sed -i 's/-contigs.fa/.db/g' internal_genomes.txt # to modify the extension of the database files from -contigs.fa to .db
 
 ````
-####Generating an anvi’o genomes storage
+
