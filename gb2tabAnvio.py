@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+### modified from https://github.com/nextgenusfs/genome_scripts/blob/master/gb2tab.py
 import sys, argparse
 from Bio import SeqIO
 
@@ -27,7 +27,7 @@ contig = 0 # we create the first gene id thal will correspond to the ordrg of th
 for record in SeqIO.parse(open(gb_file,"r"), "genbank") : ###parsing gbk file by reading it
     for f in record.features: # we are ietrating thorugh the  features in the recordes
         if f.type == 'CDS': # when the recorde features type if CDS we will retrieve qualifiers
-            chr = record.id
+            chr = record.id.split(".")[0]
             ID = f.qualifiers['locus_tag'][0]
             if ID != "":
                 contig += 1 # increment the number of the genes to be assigned as gene id
@@ -38,7 +38,7 @@ for record in SeqIO.parse(open(gb_file,"r"), "genbank") : ###parsing gbk file by
                 product = f.qualifiers['product'][0]
             except KeyError:
                 product = "hypothetical protein"
-            start = f.location.nofuzzy_start + 1
+            start = f.location.nofuzzy_start
             end = f.location.nofuzzy_end
             strand = f.location.strand
             if strand == 1:
