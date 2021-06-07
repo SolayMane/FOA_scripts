@@ -66,4 +66,15 @@ ls anvioDB/| while read file
 ```bash
 anvi-gen-genomes-storage -e external_genomes.txt -o FO-GENOMES.db
 ````
+### Run pangenome pipeline
+````bash
 
+anvi-pan-genome \
+-g FO-GENOMES.db \
+-n FOPanGenome \
+--num-threads 36 \
+--use-ncbi-blast \
+--mcl-inflation 10 \
+--minbit 0.5 \
+--output-dir FO_pangenomics
+````
